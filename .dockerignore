@@ -1,0 +1,20 @@
+.git
+.gitignore
+.venv
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+*.log
+
+# Local artifacts not needed in container
+image
+debug
+docs
+examples
+flyio.txt
+COLLAB_PLAN.md
+
+# Editor / OS noise
+.DS_Store
+Thumbs.db
