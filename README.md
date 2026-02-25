@@ -11,6 +11,8 @@ The parser can return:
 - Full routine entries (day, time, course, section, faculty, room)
 - Minimal output (course code + section only) for autofill workflows
 
+This project is exposed as a FastAPI service.
+
 ## Features
 
 - EasyOCR-based OCR pipeline (CPU-friendly)
@@ -20,6 +22,7 @@ The parser can return:
 
 ## Project structure
 
+- `app/main.py` - FastAPI entrypoint
 - `routine_parser/` - parser core logic
 - `examples/run_parser.py` - full parser CLI
 - `examples/run_course_section_parser.py` - minimal parser CLI
@@ -42,35 +45,32 @@ python -m pip install --index-url https://download.pytorch.org/whl/cpu torch tor
 python -m pip install -r requirements.txt
 ```
 
-## Usage
+## API usage
 
-### Full parser
-
-```bash
-python examples/run_parser.py image/image.png
-```
-
-Returns structured routine JSON including classes, meta warnings, and parser details.
-
-### Course + section only (recommended for autofill)
+Run server:
 
 ```bash
-python examples/run_course_section_parser.py image/image.png
+python -m uvicorn app.main:app --host 0.0.0.0 --port 8000
 ```
 
-Returns:
+Endpoints:
 
-```json
-{
-  "course_sections": [
-    { "course_code": "CSE330", "section": "06" }
-  ],
-  "meta": {
-    "source_image": "image/image.png",
-    "template_id": "light_grid",
-    "warnings": []
-  }
-}
+- `GET /health`
+- `POST /parse/full` (form-data key: `file`)
+- `POST /parse/course-sections` (form-data key: `file`)
+
+Example request:
+
+```bash
+curl -X POST "http://localhost:8000/parse/course-sections" -F "file=@image/image.png"
+```
+
+## Railway deploy command
+
+Set the start command to:
+
+```bash
+python -m uvicorn app.main:app --host 0.0.0.0 --port $PORT
 ```
 
 ## Notes and limitations
