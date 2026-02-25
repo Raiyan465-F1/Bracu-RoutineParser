@@ -1,2 +1,2 @@
 opencv-python>=4.9.0
-# OCR backends are optional and installed separately (see docs/CPU_SETUP.md).
+easyocr>=1.7.2
